@@ -5,219 +5,615 @@
   <title>King Vibez</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #ff6f61;
-      --secondary-color: #64b5f6;
-      --accent-color: #f7b731;
+      --primary-color: #ff6f61; /* Original vibrant orange-red */
+      --secondary-color: #64b5f6; /* Original light blue */
+      --accent-color: #f7b731; /* New: A warm golden yellow for highlights */
       --text-light: #f5f5f5;
+      --text-dark: #24292e;
       --background-dark: #1a1a1a;
       --accent-dark: #2e2e2e;
-      --shadow-color: rgba(0, 0, 0, 0.5);
-      --font-primary: 'Roboto', sans-serif;
+      --transition-duration: 0.3s; /* Slightly longer for smoother animations */
+      --font-primary: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
       --font-accent: 'Oswald', sans-serif;
+      --menu-width: 220px;
+      --shadow-color: rgba(0, 0, 0, 0.5); /* Darker shadow for more depth */
+      --menu-collapsed-width: 0px;
+      --menu-collapsed-offset: -250px;
+      --menu-expanded-width: 250px;
+      --menu-shape-radius: 10px;
       --background-url: url('https://i.ibb.co/Y7dxr9NJ/IMG-20250518-WA0272.jpg');
     }
 
     body {
+      display: grid;
+      grid-template-columns: 1fr;
+      min-height: 100vh;
       margin: 0;
-      font-family: var(--font-primary);
       background-color: var(--background-dark);
-      background-image: linear-gradient(45deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), var(--background-url);
+      background-image: linear-gradient(45deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.85)), var(--background-url);
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
       color: var(--text-light);
+      font-family: var(--font-primary);
+      text-align: center;
+      padding: 0;
       overflow-x: hidden;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    h1, h2 {
+      font-family: var(--font-accent);
+      text-shadow: 4px 4px 8px var(--shadow-color);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-light);
     }
 
     h1 {
-      font-family: var(--font-accent);
-      font-size: 3em;
-      text-align: center;
-      margin-top: 100px;
-    }
-
-    p {
-      text-align: center;
-      max-width: 600px;
-      margin: 0 auto 30px;
+      font-size: 4em;
+      margin-bottom: 30px;
+      /* Animation only applies to hero-section H1 */
+      opacity: 0; /* Hidden initially for animation */
+      animation: fadeInUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
     }
 
     .hero-buttons {
       display: flex;
-      flex-direction: column;
+      flex-wrap: wrap;
       gap: 20px;
-      align-items: center;
       margin-bottom: 40px;
+      /* Animation only applies to hero-section buttons */
+      opacity: 0; /* Hidden initially for animation */
+      animation: fadeInUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+      justify-content: center;
     }
 
     .btn {
+      padding: 1.2em 2.5em;
       background-color: var(--primary-color);
-      color: white;
-      padding: 15px 30px;
+      border-radius: 12px;
       border: none;
-      border-radius: 10px;
-      font-weight: bold;
-      text-transform: uppercase;
-      font-size: 1em;
+      transition: transform var(--transition-duration) ease-out, box-shadow var(--transition-duration) ease-out, background-color var(--transition-duration) ease-out;
       cursor: pointer;
+      font-weight: 700;
+      font-size: 1.1em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-light);
+      box-shadow: 0 8px 15px var(--shadow-color);
+      position: relative;
+      overflow: hidden;
       text-decoration: none;
-      transition: 0.3s ease;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent 30%, var(--secondary-color), transparent 70%);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease-out;
+      z-index: 1;
+    }
+
+    .btn span {
+      position: relative;
+      z-index: 2;
     }
 
     .btn:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 25px var(--shadow-color);
       background-color: var(--accent-color);
-      transform: translateY(-5px);
+    }
+
+    .btn:hover::before {
+      transform: translateX(100%);
     }
 
     .social-links {
       display: flex;
+      gap: 25px;
+      font-size: 2.5em;
+      /* Animation only applies to hero-section social links */
+      opacity: 0; /* Hidden initially for animation */
+      animation: fadeInUp 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
       justify-content: center;
-      gap: 20px;
-      font-size: 1.8em;
-      margin-top: 20px;
+      margin-top: 30px;
     }
 
     .social-links a {
-      color: white;
-      transition: 0.3s ease;
+      color: var(--text-light);
+      transition: color var(--transition-duration) ease-out, transform var(--transition-duration) ease-out;
     }
 
     .social-links a:hover {
       color: var(--primary-color);
-      transform: translateY(-4px);
+      transform: translateY(-5px) scale(1.1);
     }
 
     .menu-toggle {
       position: fixed;
-      top: 20px;
-      left: 20px;
+      top: 30px;
+      left: 30px;
       background: none;
       border: none;
-      color: white;
+      color: var(--text-light);
       font-size: 1.8em;
-      z-index: 100;
+      cursor: pointer;
+      z-index: 30;
+      transition: transform var(--transition-duration), color var(--transition-duration);
+      padding: 10px;
+    }
+
+    .menu-toggle:hover {
+      transform: scale(1.15);
+      color: var(--accent-color);
     }
 
     .sidebar-menu {
+      background-color: var(--accent-dark);
+      width: var(--menu-collapsed-width);
+      height: 100vh;
       position: fixed;
       top: 0;
-      left: -250px;
-      width: 250px;
-      height: 100%;
-      background-color: var(--accent-dark);
-      color: white;
-      padding: 20px;
-      transition: 0.3s ease;
-      z-index: 99;
+      left: var(--menu-collapsed-offset);
+      transition: left var(--transition-duration) ease-in-out, width var(--transition-duration) ease-in-out, box-shadow var(--transition-duration) ease-in-out, border-radius var(--transition-duration) ease-in-out;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: none;
+      z-index: 20;
+      border-radius: var(--menu-shape-radius) 0 0 var(--menu-shape-radius);
+      overflow: hidden;
+      border-right: none;
     }
 
     .sidebar-menu.open {
       left: 0;
+      width: var(--menu-expanded-width);
+      padding: 20px;
+      align-items: flex-start;
+      border-radius: 0;
+      box-shadow: 4px 0 20px var(--shadow-color);
+      border-right: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .sidebar-menu .logo {
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-sizing: border-box;
+    }
+
+    .sidebar-menu .logo img {
+      display: block;
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      margin-bottom: 15px;
+      border-radius: 50%;
+      border: 3px solid var(--primary-color);
+      box-shadow: 0 0 15px rgba(255, 111, 97, 0.5);
+    }
+
+    .sidebar-menu .logo h2 {
+      color: var(--text-light);
+      font-size: 1.4em;
+      margin: 0;
+      font-weight: bold;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: opacity var(--transition-duration) ease-in-out;
+      opacity: 0;
+    }
+
+    .sidebar-menu.open .logo h2 {
+      opacity: 1;
     }
 
     .sidebar-menu ul {
       list-style: none;
       padding: 0;
       margin: 0;
+      width: 100%;
+      display: none;
+    }
+
+    .sidebar-menu.open ul {
+      display: block;
     }
 
     .sidebar-menu ul li {
-      margin: 20px 0;
+      margin-bottom: 12px;
     }
 
     .sidebar-menu ul li a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 1em;
       display: flex;
       align-items: center;
-      gap: 10px;
+      color: var(--text-light);
+      padding: 12px 18px;
+      text-decoration: none;
+      font-size: 1em;
+      transition: background-color var(--transition-duration), color var(--transition-duration), padding-left var(--transition-duration);
+      border-radius: 8px;
+      white-space: nowrap;
+    }
+
+    /* Style for active link in sidebar */
+    .sidebar-menu ul li a.active-link {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: var(--primary-color);
+        font-weight: bold;
+        box-shadow: inset 2px 2px 5px rgba(0,0,0,0.3);
+    }
+
+    .sidebar-menu ul li a i {
+      margin-right: 12px;
+      font-size: 1.2em;
+      min-width: 20px;
+      text-align: center;
     }
 
     .sidebar-menu ul li a:hover {
+      background-color: rgba(255, 255, 255, 0.15);
       color: var(--accent-color);
+      padding-left: 25px;
     }
 
-    footer {
-      margin-top: auto;
+    /* The content-container ensures all content sections are placed similarly */
+    .content-container {
+        grid-column: 1 / 2;
+        padding: 50px 30px; /* Base padding for the container */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center; /* Center content vertically if space allows */
+        min-height: 100vh; /* This will make the main view fill the screen */
+        transition: transform var(--transition-duration) ease-in-out;
+        position: relative;
+        z-index: 10;
+        box-sizing: border-box; /* Include padding in width/height */
+    }
+
+    body.menu-open .content-container {
+      transform: translateX(var(--menu-expanded-width));
+      margin-left: 0;
+    }
+
+    /* Styles for content sections */
+    .content-section {
+      padding: 80px 20px;
+      margin: 0 auto;
+      max-width: 900px;
+      width: 100%;
+      box-sizing: border-box;
+      background-color: rgba(30, 30, 30, 0.75);
+      border-radius: 15px;
+      margin-bottom: 40px; /* Space between sections when stacked (debug only) */
+      box-shadow: 0 10px 30px var(--shadow-color);
+      text-align: left;
+      /* NEW: Default to hidden for all content sections, managed by JS .active class */
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; /* Added transform for potential entry animation */
+      /* Position absolute to stack them on top of each other,
+         allowing the container to size based on the active one */
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%); /* Center horizontally */
+      min-height: calc(100vh - 100px); /* Ensure sections fill height for better presentation */
+      justify-content: flex-start; /* Align content to top within the section */
+    }
+
+    .content-section.active {
+      display: flex; /* Show when active */
+      opacity: 1; /* Fade in */
+      position: relative; /* Take up space in flow when active */
+      transform: translateX(-50%) translateY(0); /* Remove initial offset if any, ensure centered */
+      animation: none; /* Disable hero section animations once active */
+      min-height: auto; /* Allow content to dictate height, or keep as 100vh if preferred */
+    }
+
+    /* Specific adjustments for hero section animations when it's active */
+    #hero-section.active h1,
+    #hero-section.active .hero-buttons,
+    #hero-section.active .social-links {
+      opacity: 1;
+      transform: translateY(0);
+      animation: none; /* Stop re-running initial animations */
+    }
+
+
+    /* Ensure the main-content (hero section) special elements fade in once it's active */
+    #hero-section.active h1 { animation: fadeInUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+    #hero-section.active .hero-buttons { animation: fadeInUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards; }
+    #hero-section.active .social-links { animation: fadeInUp 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards; }
+    #hero-section.active p { animation: fadeInUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards; opacity: 0; } /* Text animation */
+
+
+    .content-section h2 {
+      font-size: 3em;
+      margin-bottom: 40px;
+      color: var(--primary-color);
       text-align: center;
+      width: 100%;
+    }
+
+    .content-section p {
+      margin-bottom: 20px;
+      line-height: 1.8;
+      color: var(--text-light);
+      text-align: center;
+      max-width: 700px;
+    }
+
+    .content-section .items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      width: 100%;
+      margin-top: 30px;
+      justify-content: center;
+    }
+
+    .content-section .item-card {
+      background-color: rgba(45, 45, 45, 0.9);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      transition: transform var(--transition-duration), box-shadow var(--transition-duration);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .content-section .item-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    .content-section .item-card img {
+      max-width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      border: 2px solid var(--primary-color);
+    }
+
+    .content-section .item-card h3 {
+      font-size: 1.4em;
+      color: var(--accent-color);
+      margin: 10px 0;
+    }
+
+    .content-section .item-card p {
+      font-size: 0.9em;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .content-section .item-card .btn {
+      padding: 0.8em 1.5em;
+      font-size: 0.9em;
+      margin-top: auto;
+    }
+
+    /* Footer styles */
+    .footer {
+      grid-column: 1 / 2;
       padding: 20px;
       background-color: rgba(0, 0, 0, 0.6);
-      color: #ccc;
+      color: rgba(255, 255, 255, 0.7);
       font-size: 0.9em;
+      margin-top: auto;
       border-top: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: inset 0 5px 10px rgba(0,0,0,0.3);
+      position: relative; /* Ensure footer stays below content */
+      z-index: 5; /* Lower than content sections */
     }
 
-    @media (max-width: 600px) {
+    /* Keyframe Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
       h1 {
-        font-size: 2em;
+        font-size: 3em;
         margin-top: 80px;
+      }
+      .content-section h2 {
+        font-size: 2.2em;
+      }
+
+      .menu-toggle {
+        top: 20px;
+        left: 20px;
+        font-size: 1.6em;
+      }
+
+      .sidebar-menu {
+        width: var(--menu-expanded-width);
+        left: var(--menu-collapsed-offset);
+        border-radius: 0;
+        box-shadow: 4px 0 20px var(--shadow-color);
+      }
+
+      .sidebar-menu.open {
+        left: 0;
+      }
+
+      .content-container {
+        grid-column: 1 / 2;
+        margin-left: 0;
+        padding: 20px;
+        transform: translateX(0);
+        min-height: calc(100vh - 100px); /* Adjust min-height for sections on mobile */
+        justify-content: flex-start; /* Align content to top for sections */
+      }
+
+      body.menu-open .content-container {
+        transform: translateX(var(--menu-expanded-width));
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
       }
 
       .btn {
         width: 80%;
         max-width: 300px;
       }
+
+      .social-links {
+        font-size: 2em;
+      }
+
+      .content-section {
+        padding: 60px 15px;
+        margin-bottom: 30px;
+        min-height: auto; /* On mobile, let content determine height to avoid overflow */
+      }
+
+      .content-section .items-grid {
+        grid-template-columns: 1fr;
+      }
     }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2.5em;
+        margin-top: 70px;
+      }
+      .content-section h2 {
+        font-size: 1.8em;
+      }
+
+      .btn {
+        font-size: 1em;
+        padding: 1em 2em;
+      }
+
+      .social-links {
+        font-size: 1.8em;
+        gap: 15px;
+      }
+      .content-section {
+        padding: 40px 10px;
+      }
+      .content-section .item-card img {
+        height: 150px;
+      }
+    }
+
   </style>
 </head>
 <body>
 
-  <button class="menu-toggle" onclick="toggleMenu()">
+  <button class="menu-toggle" aria-label="Toggle Navigation Menu" onclick="toggleMenu()">
     <i class="fas fa-bars"></i>
   </button>
 
-  <nav class="sidebar-menu" id="sidebarMenu">
+  <div class="sidebar-menu">
+    <div class="logo">
+      <img src="https://i.ibb.co/Y7dxr9NJ/IMG-20250518-WA0272.jpg" alt="King Vibez Logo">
+      <h2>King Vibez</h2>
+    </div>
     <ul>
-      <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
-      <li><a href="#music"><i class="fas fa-music"></i> Music</a></li>
-      <li><a href="#videos"><i class="fas fa-play-circle"></i> Videos</a></li>
-      <li><a href="#merch"><i class="fas fa-tshirt"></i> Merch</a></li>
-      <li><a href="#tour"><i class="fas fa-calendar"></i> Tour</a></li>
-      <li><a href="#about"><i class="fas fa-user"></i> About</a></li>
+      <li><a href="#hero-section" class="sidebar-link active-link"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="#music" class="sidebar-link"><i class="fas fa-music"></i> Music</a></li>
+      <li><a href="#videos" class="sidebar-link"><i class="fas fa-play-circle"></i> Videos</a></li>
+      <li><a href="#merch" class="sidebar-link"><i class="fas fa-shopping-bag"></i> Merch</a></li>
+      <li><a href="#tour" class="sidebar-link"><i class="fas fa-calendar-alt"></i> Tour Dates</a></li>
+      <li><a href="#about" class="sidebar-link"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="#contact" class="sidebar-link"><i class="fas fa-envelope"></i> Contact</a></li>
     </ul>
-  </nav>
+  </div>
 
-  <main>
-    <h1>King Vibez</h1>
-    <p>Experience the rhythm, feel the soul, and dive into the world of King Vibez.</p>
+  <div class="content-container">
+    <section class="content-section" id="hero-section">
+      <h1>King Vibez</h1>
+      <p style="font-size: 1.2em; max-width: 600px; margin-bottom: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.6);">
+          Experience the rhythm, feel the soul, and dive into the world of King Vibez.
+      </p>
 
-    <div class="hero-buttons">
-      <a href="https://open.spotify.com" target="_blank" class="btn">Listen Now</a>
-      <a href="https://youtube.com" target="_blank" class="btn">Watch Video</a>
-      <a href="https://example.com/merch" target="_blank" class="btn">Shop Merch</a>
-      <a href="https://example.com/tour" target="_blank" class="btn">Tour Dates</a>
-      <a href="https://example.com/about" target="_blank" class="btn">About</a>
-    </div>
+      <div class="hero-buttons">
+        <a href="https://open.spotify.com" target="_blank" class="btn"><span>Listen Now</span></a>
+        <a href="https://youtube.com" target="_blank" class="btn"><span>Watch Video</span></a>
+        <a href="https://example.com/merch" target="_blank" class="btn"><span>Shop Merch</span></a>
+        <a href="https://example.com/tour" target="_blank" class="btn"><span>Tour Dates</span></a>
+        <a href="https://example.com/about" target="_blank" class="btn"><span>About</span></a>
+      </div>
 
-    <div class="social-links">
-      <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
-      <a href="https://tiktok.com" target="_blank"><i class="fab fa-tiktok"></i></a>
-      <a href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
-      <a href="https://x.com" target="_blank"><i class="fab fa-x-twitter"></i></a>
-      <a href="https://spotify.com" target="_blank"><i class="fab fa-spotify"></i></a>
-    </div>
-  </main>
+      <div class="social-links">
+        <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://tiktok.com" target="_blank" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        <a href="https://youtube.com" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://x.com" target="_blank" aria-label="X"><i class="fab fa-x-twitter"></i></a>
+        <a href="https://spotify.com" target="_blank" aria-label="Spotify"><i class="fab fa-spotify"></i></a>
+      </div>
+    </section>
 
-  <footer>
-    ©2025–<span id="currentYear"></span>. All rights reserved. King Vibez.
-  </footer>
+    <section id="music" class="content-section">
+      <h2>Music</h2>
+      <p>Dive into the latest tracks and timeless classics from King Vibez. Available on all major streaming platforms.</p>
+      <div class="items-grid">
+        <div class="item-card">
+          <img src="https://via.placeholder.com/300x200/ff6f61/ffffff?text=Album+Art+1" alt="Album Art for Track Title 1">
+          <h3>Track Title 1</h3>
+          <p>A high-energy banger that will get you moving!</p>
+          <a href="https://spotify.com/track/1" target="_blank" class="btn"><span>Listen</span></a>
+        </div>
+        <div class="item-card">
+          <img src="https://via.placeholder.com/300x200/64b5f6/ffffff?text=Album+Art+2" alt="Album Art for Track Title 2">
+          <h3>Track Title 2</h3>
+          <p>Smooth melodies and deep lyrics, perfect for chill vibes.</p>
+          <a href="https://spotify.com/track/2" target="_blank" class="btn"><span>Listen</span></a>
+        </div>
+        <div class="item-card">
+          <img src="https://via.placeholder.com/300x200/f7b731/ffffff?text=Album+Art+3" alt="Album Art for Track Title 3">
+          <h3>Track Title 3</h3>
+          <p>Collaborative hit with a unique sound and powerful message.</p>
+          <a href="https://spotify.com/track/3" target="_blank" class="btn"><span>Listen</span></a>
+        </div>
+      </div>
+    </section>
 
-  <script>
-    function toggleMenu() {
-      document.getElementById('sidebarMenu').classList.toggle('open');
-    }
-
-    // Set current year
-    document.getElementById('currentYear').textContent = new Date().getFullYear();
-  </script>
-
-</body>
-                                                     </html>
+    <section id="videos" class="content-section">
+      <h2>Videos</h2>
+      <p>Watch the official music videos, live performances, and exclusive content from King Vibez.</p>
+      <div class="items-grid">
+        <div class="item-card">
+          <img src="https://via.placeholder.com/300x200/ff6f61/ffffff?text=Video+Thumbnail+1" alt="Video Th
