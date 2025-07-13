@@ -22,8 +22,7 @@
       --font-accent: 'Oswald', sans-serif;
       --menu-width: 220px;
       --shadow-color: rgba(0, 0, 0, 0.6); /* More pronounced shadow */
-      --menu-collapsed-width: 0px;
-      --menu-collapsed-offset: -250px;
+      --menu-collapsed-offset: -250px; /* How far off-screen it is when collapsed */
       --menu-expanded-width: 250px;
       --menu-shape-radius: 10px;
       --background-url: url('https://i.ibb.co/Y7dxr9NJ/IMG-20250518-WA0272.jpg');
@@ -60,7 +59,7 @@
     h1 {
       font-size: 4.5em; /* Larger hero title */
       margin-bottom: 35px;
-      opacity: 0;
+      opacity: 0; /* Hidden initially for animation */
       animation: fadeInUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
     }
 
@@ -73,9 +72,19 @@
       flex-wrap: wrap;
       gap: 25px; /* Increased gap */
       margin-bottom: 50px; /* More space below buttons */
-      opacity: 0;
+      opacity: 0; /* Hidden initially for animation */
       animation: fadeInUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
       justify-content: center;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 30px; /* More space between icons */
+      font-size: 2.8em; /* Larger social icons */
+      opacity: 0; /* Hidden initially for animation */
+      animation: fadeInUp 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+      justify-content: center;
+      margin-top: 40px;
     }
 
     .btn {
@@ -126,16 +135,6 @@
       transform: translateX(100%);
     }
 
-    .social-links {
-      display: flex;
-      gap: 30px; /* More space between icons */
-      font-size: 2.8em; /* Larger social icons */
-      opacity: 0;
-      animation: fadeInUp 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
-      justify-content: center;
-      margin-top: 40px;
-    }
-
     .social-links a {
       color: var(--text-light);
       transition: color var(--transition-duration) ease-out, transform var(--transition-duration) ease-out;
@@ -168,11 +167,11 @@
 
     .sidebar-menu {
       background-color: var(--accent-dark);
-      width: var(--menu-collapsed-width);
+      width: 0; /* Starts at 0 width */
       height: 100vh;
       position: fixed;
       top: 0;
-      left: var(--menu-collapsed-offset);
+      left: var(--menu-collapsed-offset); /* Ensure it's fully off-screen */
       transition: left var(--transition-duration) ease-in-out, width var(--transition-duration) ease-in-out, box-shadow var(--transition-duration) ease-in-out, border-radius var(--transition-duration) ease-in-out;
       padding: 10px;
       display: flex;
@@ -181,13 +180,13 @@
       box-shadow: none;
       z-index: 20;
       border-radius: var(--menu-shape-radius) 0 0 var(--menu-shape-radius);
-      overflow: hidden;
+      overflow: hidden; /* Crucial to hide content overflow */
       border-right: 1px solid rgba(255,255,255,0.05); /* Added subtle border */
     }
 
     .sidebar-menu.open {
       left: 0;
-      width: var(--menu-expanded-width);
+      width: var(--menu-expanded-width); /* Expands to full width */
       padding: 20px;
       align-items: flex-start;
       border-radius: 0;
@@ -238,11 +237,11 @@
       padding: 0;
       margin: 0;
       width: 100%;
-      display: none;
+      display: none; /* Hidden by default */
     }
 
     .sidebar-menu.open ul {
-      display: block;
+      display: block; /* Shown when open */
     }
 
     .sidebar-menu ul li {
@@ -308,10 +307,6 @@
       padding-left: 30px; /* More pronounced slide effect */
       box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
     }
-    .sidebar-menu ul li a:hover::before {
-      width: 100%; /* Fill background on hover */
-      opacity: 0.1;
-    }
     .sidebar-menu ul li a:hover.active-link::before {
         width: 5px; /* Keep the active bar */
         opacity: 1;
@@ -346,11 +341,11 @@
       border-radius: 20px; /* More rounded sections */
       box-shadow: 0 12px 35px var(--shadow-color); /* Stronger shadow */
       text-align: left;
-      display: none;
+      display: none; /* Default to hidden for all content sections, managed by JS .active class */
       flex-direction: column;
       align-items: center;
-      opacity: 0;
-      transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out; /* Slower, smoother transitions */
+      opacity: 0; /* Hidden for fade-in effect */
+      transition: opacity 0.6s ease-in-out; /* Only fade-in, no transform here */
       position: absolute;
       top: 0;
       left: 50%;
@@ -360,18 +355,26 @@
     }
 
     .content-section.active {
-      display: flex;
-      opacity: 1;
-      position: relative;
-      transform: translateX(-50%) translateY(0);
-      animation: none;
-      min-height: auto;
+      display: flex; /* Show when active */
+      opacity: 1; /* Fade in */
+      position: relative; /* Take up space in flow when active */
+      transform: translateX(-50%) translateY(0); /* Ensure centered */
+      /* No animation property here to prevent conflicts */
     }
 
-    #hero-section.active.animate h1 { animation: fadeInUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
-    #hero-section.active.animate p { animation: fadeInUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards; }
-    #hero-section.active.animate .hero-buttons { animation: fadeInUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards; }
-    #hero-section.active.animate .social-links { animation: fadeInUp 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards; }
+    /* Initial animations for hero section elements - these are applied ON LOAD via JS active class */
+    #hero-section h1 {
+        animation: fadeInUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+    #hero-section p {
+        animation: fadeInUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards;
+    }
+    #hero-section .hero-buttons {
+        animation: fadeInUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+    }
+    #hero-section .social-links {
+        animation: fadeInUp 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+    }
 
 
     .content-section h2 {
@@ -535,14 +538,17 @@
       }
 
       .sidebar-menu {
-        width: var(--menu-expanded-width);
+        /* Corrected: width will be 0 when not open, left pushed off screen */
         left: var(--menu-collapsed-offset);
+        width: 0; /* Ensure it's hidden */
         border-radius: 0;
-        box-shadow: 4px 0 20px var(--shadow-color);
+        box-shadow: none; /* No shadow when collapsed */
       }
 
       .sidebar-menu.open {
         left: 0;
+        width: var(--menu-expanded-width);
+        box-shadow: 4px 0 20px var(--shadow-color);
       }
 
       /* Hero section specific adjustments */
@@ -679,8 +685,7 @@
   </div>
 
   <div class="content-container">
-    <section class="content-section" id="hero-section">
-      <h1>King Vibez</h1>
+    <section class="content-section active" id="hero-section"> <h1>King Vibez</h1>
       <p style="font-size: 1.2em; max-width: 600px; margin-bottom: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.6);">
           Experience the rhythm, feel the soul, and dive into the world of King Vibez.
       </p>
@@ -833,16 +838,11 @@
     const contentSections = document.querySelectorAll('.content-section');
     const sidebarLinks = document.querySelectorAll('.sidebar-link');
     const contentContainer = document.querySelector('.content-container');
-    const scrollIndicator = document.getElementById('scroll-indicator'); // Get scroll indicator
+    const scrollIndicator = document.getElementById('scroll-indicator');
 
     function hideAllSections() {
       contentSections.forEach(section => {
         section.classList.remove('active');
-        section.classList.remove('animate'); // Remove animate class to reset animations
-        // Reset animations on hide to ensure they replay on next show
-        section.querySelectorAll('h1, p, .hero-buttons, .social-links').forEach(el => {
-            el.style.animation = 'none';
-        });
       });
     }
 
@@ -853,33 +853,18 @@
         clickedLink.classList.add('active-link');
     }
 
-    function triggerHeroAnimations() {
-        const heroSection = document.getElementById('hero-section');
-        // Add the 'animate' class to trigger animations via CSS
-        heroSection.classList.add('animate');
-        // Remove it after a delay if you only want it to play once per activation
-        setTimeout(() => {
-            heroSection.classList.remove('animate');
-        }, 1500); // Match or exceed the longest animation duration
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
       // Set dynamic year in footer
       const yearSpan = document.getElementById('copyright-year');
       const currentYear = new Date().getFullYear();
       yearSpan.textContent = `© 2025 - ${currentYear}`;
 
-      hideAllSections();
+      // Ensure hero section is active on initial load
       document.getElementById('hero-section').classList.add('active');
       document.querySelector('.sidebar-link[href="#hero-section"]').classList.add('active-link');
-      triggerHeroAnimations();
-
-      // Show/hide scroll indicator based on hero section being active
-      if (document.getElementById('hero-section').classList.contains('active')) {
-          scrollIndicator.style.display = 'flex';
-      } else {
-          scrollIndicator.style.display = 'none';
-      }
+      
+      // Initially show scroll indicator for hero section
+      scrollIndicator.style.display = 'flex';
     });
 
     function toggleMenu() {
@@ -888,6 +873,7 @@
     }
 
     document.addEventListener('click', (event) => {
+      // Close menu if clicking outside sidebar AND not on the menu toggle
       if (sidebarMenu.classList.contains('open') &&
           !sidebarMenu.contains(event.target) &&
           !document.querySelector('.menu-toggle').contains(event.target)) {
@@ -913,7 +899,6 @@
                 targetElement.classList.add('active');
 
                 if (targetId === '#hero-section') {
-                    triggerHeroAnimations();
                     scrollIndicator.style.display = 'flex'; // Show indicator for hero section
                 } else {
                     scrollIndicator.style.display = 'none'; // Hide indicator for other sections
