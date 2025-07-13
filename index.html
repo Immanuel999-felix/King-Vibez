@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
+    /* Base Dark Mode Variables (Default) */
     :root {
       --primary-color: #ff5e50; /* A slightly softer, but still vibrant red-orange */
       --secondary-color: #5ab1bb; /* A more sophisticated teal/blue */
@@ -16,21 +17,48 @@
       --text-light: #f8f8f8; /* Slightly brighter white for text */
       --text-dark: #202020;
       --background-dark: #121212; /* Deeper, richer dark background */
-      --accent-dark: #282828; /* Darker accent for sidebar */
+      --accent-dark: #282828; /* Darker accent for sidebar & general cards */
+      --section-bg: rgba(35, 35, 35, 0.85); /* Background for content sections */
+      --card-bg: rgba(40, 40, 40, 0.95); /* Background for item cards */
+      --border-color-subtle: rgba(255,255,255,0.05); /* Subtle border for cards/sidebar */
+      --shadow-color: rgba(0, 0, 0, 0.6); /* More pronounced shadow */
+      --active-link-bg: rgba(255, 255, 255, 0.15); /* Sidebar active link background */
+      --hover-bg: rgba(255, 255, 255, 0.2); /* Sidebar hover background */
+      --footer-bg: rgba(0, 0, 0, 0.7); /* Footer background */
+      --footer-text: rgba(255, 255, 255, 0.75); /* Footer text color */
       --transition-duration: 0.4s; /* Slightly longer for smoother animations */
       --font-primary: 'Roboto', -apple-system, BlinkMacMacFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
       --font-accent: 'Oswald', sans-serif;
       --menu-width: 220px;
-      --shadow-color: rgba(0, 0, 0, 0.6); /* More pronounced shadow */
       --menu-collapsed-offset: -250px; /* How far off-screen it is when collapsed */
       --menu-expanded-width: 250px;
       --menu-shape-radius: 10px;
       --background-url: url('https://i.ibb.co/Y7dxr9NJ/IMG-20250518-WA0272.jpg');
     }
 
+    /* Light Mode Variables */
+    body.light-mode {
+      --primary-color: #007bff; /* A nice blue */
+      --secondary-color: #28a745; /* A vibrant green */
+      --accent-color: #fd7e14; /* An orange accent */
+      --text-light: #212529; /* Dark text for light background */
+      --text-dark: #f8f9fa; /* Light text for dark elements in light mode */
+      --background-dark: #f0f2f5; /* Light grey background */
+      --accent-dark: #e9ecef; /* Lighter accent for sidebar */
+      --section-bg: rgba(255, 255, 255, 0.95); /* White background for sections */
+      --card-bg: rgba(248, 249, 250, 0.98); /* Very light background for cards */
+      --border-color-subtle: rgba(0,0,0,0.1); /* Subtle dark border */
+      --shadow-color: rgba(0, 0, 0, 0.2); /* Lighter shadow for light mode */
+      --active-link-bg: rgba(0, 123, 255, 0.1); /* Sidebar active link background in light mode */
+      --hover-bg: rgba(0, 0, 0, 0.05); /* Sidebar hover background in light mode */
+      --footer-bg: rgba(220, 220, 220, 0.9); /* Lighter footer background */
+      --footer-text: rgba(33, 37, 41, 0.8); /* Darker footer text */
+      --background-url: none; /* Remove background image for light mode, or choose a lighter one */
+    }
+
     body {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-rows: 1fr auto; /* Content takes available space, footer below */
       min-height: 100vh;
       margin: 0;
       background-color: var(--background-dark);
@@ -45,7 +73,14 @@
       overflow-x: hidden;
       line-height: 1.6;
       position: relative; /* For scroll indicator */
+      transition: background-color var(--transition-duration), color var(--transition-duration); /* Smooth theme transition */
     }
+
+    /* Override background-image for light mode */
+    body.light-mode {
+      background-image: none; /* Removes image for pure light mode */
+    }
+
 
     h1, h2 {
       font-family: var(--font-accent);
@@ -64,7 +99,7 @@
     }
 
     p {
-      color: rgba(var(--text-light), 0.9); /* Slightly desaturated for paragraph text */
+      color: var(--text-light); /* Changed from rgba to direct variable */
     }
 
     .hero-buttons {
@@ -98,7 +133,7 @@
       font-size: 1.15em; /* Slightly larger font in buttons */
       text-transform: uppercase;
       letter-spacing: 1.2px;
-      color: var(--text-light);
+      color: var(--text-dark); /* Button text always contrasts with button background */
       box-shadow: 0 10px 20px var(--shadow-color); /* More prominent shadow */
       position: relative;
       overflow: hidden;
@@ -106,6 +141,10 @@
       outline: none; /* Remove outline on focus */
       border: 2px solid transparent; /* Prepare for border hover effect */
     }
+    body.light-mode .btn {
+        color: var(--text-light); /* Button text becomes dark in light mode */
+    }
+
 
     .btn::before {
       content: '';
@@ -172,16 +211,16 @@
       position: fixed;
       top: 0;
       left: var(--menu-collapsed-offset); /* Ensure it's fully off-screen */
-      transition: left var(--transition-duration) ease-in-out, width var(--transition-duration) ease-in-out, box-shadow var(--transition-duration) ease-in-out, border-radius var(--transition-duration) ease-in-out;
+      transition: left var(--transition-duration) ease-in-out, width var(--transition-duration) ease-in-out, box-shadow var(--transition-duration) ease-in-out, border-radius var(--transition-duration) ease-in-out, background-color var(--transition-duration);
       padding: 10px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      box-shadow: none;
+      box-shadow: none; /* No shadow when collapsed */
       z-index: 20;
       border-radius: var(--menu-shape-radius) 0 0 var(--menu-shape-radius);
       overflow: hidden; /* Crucial to hide content overflow */
-      border-right: 1px solid rgba(255,255,255,0.05); /* Added subtle border */
+      border-right: 1px solid var(--border-color-subtle); /* Added subtle border */
     }
 
     .sidebar-menu.open {
@@ -196,7 +235,7 @@
     .sidebar-menu .logo {
       margin-bottom: 40px; /* More space below logo */
       padding-bottom: 25px; /* More space below logo line */
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Slightly more visible line */
+      border-bottom: 1px solid var(--border-color-subtle); /* Slightly more visible line */
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -224,7 +263,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      transition: opacity var(--transition-duration) ease-in-out;
+      transition: opacity var(--transition-duration) ease-in-out, color var(--transition-duration);
       opacity: 0;
     }
 
@@ -281,7 +320,7 @@
 
     /* Style for active link in sidebar */
     .sidebar-menu ul li a.active-link {
-        background-color: rgba(255, 255, 255, 0.15); /* More distinct background */
+        background-color: var(--active-link-bg); /* More distinct background */
         color: var(--primary-color);
         font-weight: bold;
         box-shadow: inset 3px 3px 8px rgba(0,0,0,0.4); /* Deeper inset shadow */
@@ -302,7 +341,7 @@
     }
 
     .sidebar-menu ul li a:hover {
-      background-color: rgba(255, 255, 255, 0.2); /* Stronger hover background */
+      background-color: var(--hover-bg); /* Stronger hover background */
       color: var(--accent-color);
       padding-left: 30px; /* More pronounced slide effect */
       box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
@@ -318,12 +357,11 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        min-height: 100vh;
         transition: transform var(--transition-duration) ease-in-out;
         position: relative;
         z-index: 10;
         box-sizing: border-box;
+        flex-grow: 1; /* Allow content to grow and take available space */
     }
 
     body.menu-open .content-container {
@@ -337,7 +375,7 @@
       max-width: 950px; /* Slightly wider content area */
       width: 100%;
       box-sizing: border-box;
-      background-color: rgba(35, 35, 35, 0.85); /* Slightly darker, more opaque background */
+      background-color: var(--section-bg); /* Use variable for section background */
       border-radius: 20px; /* More rounded sections */
       box-shadow: 0 12px 35px var(--shadow-color); /* Stronger shadow */
       text-align: left;
@@ -345,22 +383,22 @@
       flex-direction: column;
       align-items: center;
       opacity: 0; /* Hidden for fade-in effect */
-      transition: opacity 0.6s ease-in-out; /* Only fade-in, no transform here */
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      min-height: calc(100vh - 120px); /* Adjusted min-height */
+      transition: opacity 0.6s ease-in-out, background-color var(--transition-duration), color var(--transition-duration); /* Smooth theme transition */
+      position: relative; /* All sections are relative, but only 'active' is displayed */
       justify-content: flex-start;
     }
 
     .content-section.active {
       display: flex; /* Show when active */
       opacity: 1; /* Fade in */
-      position: relative; /* Take up space in flow when active */
-      transform: translateX(-50%) translateY(0); /* Ensure centered */
-      /* No animation property here to prevent conflicts */
+      position: relative; /* Ensure it takes up space in the document flow */
     }
+    /* Specific adjustment for hero-section to center it if needed */
+    #hero-section.active {
+        justify-content: center; /* Center content vertically on hero */
+        min-height: calc(100vh - 120px); /* Re-apply full screen min-height only to hero */
+    }
+
 
     /* Initial animations for hero section elements - these are applied ON LOAD via JS active class */
     #hero-section h1 {
@@ -383,13 +421,13 @@
       color: var(--primary-color);
       text-align: center;
       width: 100%;
-      text-shadow: 3px 3px 8px rgba(0,0,0,0.6);
+      text-shadow: 3px 3px 8px var(--shadow-color);
     }
 
     .content-section p {
       margin-bottom: 25px;
       line-height: 1.9; /* Slightly more relaxed line height */
-      color: var(--text-light);
+      color: var(--text-light); /* Direct variable */
       text-align: center;
       max-width: 750px; /* Wider paragraphs */
     }
@@ -404,31 +442,44 @@
     }
 
     .content-section .item-card {
-      background-color: rgba(40, 40, 40, 0.95); /* More opaque card background */
+      background-color: var(--card-bg); /* Use variable for card background */
       border-radius: 12px;
       padding: 25px; /* More padding inside cards */
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* Stronger card shadow */
+      box-shadow: 0 8px 20px var(--shadow-color); /* Stronger card shadow */
       text-align: center;
-      transition: transform var(--transition-duration), box-shadow var(--transition-duration);
+      transition: transform var(--transition-duration), box-shadow var(--transition-duration), background-color var(--transition-duration), border-color var(--transition-duration); /* Smooth theme transition */
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      border: 1px solid rgba(255,255,255,0.05); /* Subtle border for cards */
+      border: 1px solid var(--border-color-subtle); /* Subtle border for cards */
     }
 
     .content-section .item-card:hover {
       transform: translateY(-8px) scale(1.02); /* More lift and slight scale */
-      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.7); /* Stronger hover shadow */
+      box-shadow: 0 12px 25px var(--shadow-color); /* Stronger hover shadow */
     }
 
-    .content-section .item-card img {
+    /* Spotify Embed Specific Styles */
+    .content-section .item-card .spotify-embed {
+        width: 100%; /* Make the iframe responsive within its card */
+        height: 152px; /* Standard height for single track embed */
+        border-radius: 10px;
+        margin-bottom: 20px;
+        border: 3px solid var(--primary-color); /* Match image border style */
+        box-shadow: 0 0 10px rgba(255, 94, 80, 0.4); /* Match glow effect */
+        overflow: hidden; /* Ensure border-radius applies nicely */
+    }
+    /* For album embeds, height would be larger, e.g., height: 352px; */
+
+
+    .content-section .item-card img { /* Keep if you still have images in other sections */
       max-width: 100%;
       height: 220px; /* Slightly taller images */
       object-fit: cover;
       border-radius: 10px;
       margin-bottom: 20px;
-      border: 3px solid var(--primary-color); /* Thicker image border */
+      border: 3px solid var(--primary-color); /* Thicker border */
       box-shadow: 0 0 10px rgba(255, 94, 80, 0.4); /* Glow effect for images */
     }
 
@@ -440,7 +491,7 @@
 
     .content-section .item-card p {
       font-size: 0.95em; /* Slightly larger card text */
-      color: rgba(255, 255, 255, 0.85);
+      color: var(--text-light); /* Direct variable */
       margin-bottom: 20px;
       text-align: center;
     }
@@ -455,14 +506,15 @@
     .footer {
       grid-column: 1 / 2;
       padding: 25px; /* More padding in footer */
-      background-color: rgba(0, 0, 0, 0.7); /* Slightly more opaque footer */
-      color: rgba(255, 255, 255, 0.75); /* Brighter footer text */
+      background-color: var(--footer-bg); /* Use variable for footer background */
+      color: var(--footer-text); /* Use variable for footer text */
       font-size: 0.95em;
       margin-top: auto;
-      border-top: 1px solid rgba(255, 255, 255, 0.15); /* More visible border */
-      box-shadow: inset 0 6px 12px rgba(0,0,0,0.4); /* Deeper inset shadow */
+      border-top: 1px solid var(--border-color-subtle); /* More visible border */
+      box-shadow: inset 0 6px 12px var(--shadow-color); /* Deeper inset shadow */
       position: relative;
       z-index: 5;
+      transition: background-color var(--transition-duration), color var(--transition-duration); /* Smooth theme transition */
     }
 
     /* Keyframe Animations */
@@ -477,7 +529,7 @@
       }
     }
 
-    /* Scroll Down Indicator - NEW */
+    /* Scroll Down Indicator */
     .scroll-indicator {
         position: absolute;
         bottom: 30px;
@@ -490,12 +542,11 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        text-shadow: 1px 1px 3px var(--shadow-color);
         z-index: 15;
     }
     .scroll-indicator i {
         font-size: 1.5em;
-        margin-top: 5px;
     }
     @keyframes bounce {
         0%, 20%, 50%, 80%, 100% {
@@ -513,6 +564,71 @@
         to { opacity: 1; }
     }
 
+    /* Toggle Switch Styles (for Dark Mode) */
+    .settings-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: var(--card-bg);
+      border-radius: 10px;
+      box-shadow: 0 5px 15px var(--shadow-color);
+      transition: background-color var(--transition-duration);
+    }
+    .settings-group label {
+      font-size: 1.1em;
+      color: var(--text-light);
+      margin-right: 15px;
+      white-space: nowrap;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 28px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 28px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--primary-color);
+    }
+    input:focus + .slider {
+      box-shadow: 0 0 1px var(--primary-color);
+    }
+    input:checked + .slider:before {
+      transform: translateX(22px);
+    }
 
     /* Responsive adjustments */
     @media (max-width: 768px) {
@@ -523,7 +639,7 @@
 
       .content-container {
         padding: 30px 20px; /* Reduced padding for the container */
-        min-height: calc(100vh - 60px); /* Adjusted min-height for mobile */
+        min-height: auto; /* Let content determine height */
         justify-content: flex-start;
       }
 
@@ -538,7 +654,6 @@
       }
 
       .sidebar-menu {
-        /* Corrected: width will be 0 when not open, left pushed off screen */
         left: var(--menu-collapsed-offset);
         width: 0; /* Ensure it's hidden */
         border-radius: 0;
@@ -555,8 +670,8 @@
       #hero-section {
         padding: 50px 20px; /* More vertical padding for hero section on mobile */
         margin-top: 0;
-        min-height: auto;
-        justify-content: flex-start;
+        min-height: calc(100vh - 100px); /* Re-apply a relevant min-height for hero on mobile */
+        justify-content: center; /* Center content for hero on mobile */
       }
       #hero-section h1 {
         font-size: 3.5em; /* Adjust hero title size */
@@ -585,7 +700,7 @@
       .content-section {
         padding: 50px 20px; /* Adjusted padding for general sections */
         margin-bottom: 20px;
-        min-height: auto;
+        min-height: auto; /* Let non-hero sections determine their height */
       }
       .content-section h2 {
         font-size: 2.5em; /* Adjusted h2 for mobile */
@@ -597,6 +712,10 @@
       }
       .content-section .item-card {
         padding: 20px;
+      }
+      /* Ensure spotify embed is responsive on smaller screens too */
+      .content-section .item-card .spotify-embed {
+        height: 152px; /* Spotify standard small player height */
       }
       .content-section .item-card img {
         height: 180px;
@@ -617,6 +736,16 @@
       }
       .scroll-indicator i {
           font-size: 1.3em;
+      }
+
+      .settings-group {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+      }
+      .settings-group label {
+        margin-bottom: 10px;
+        margin-right: 0;
       }
     }
 
@@ -681,11 +810,13 @@
       <li><a href="#tour" class="sidebar-link"><i class="fas fa-calendar-alt"></i> <span>Tour Dates</span></a></li>
       <li><a href="#about" class="sidebar-link"><i class="fas fa-info-circle"></i> <span>About</span></a></li>
       <li><a href="#contact" class="sidebar-link"><i class="fas fa-envelope"></i> <span>Contact</span></a></li>
+      <li><a href="#settings" class="sidebar-link"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
     </ul>
   </div>
 
   <div class="content-container">
-    <section class="content-section active" id="hero-section"> <h1>King Vibez</h1>
+    <section class="content-section active" id="hero-section">
+      <h1>King Vibez</h1>
       <p style="font-size: 1.2em; max-width: 600px; margin-bottom: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.6);">
           Experience the rhythm, feel the soul, and dive into the world of King Vibez.
       </p>
@@ -713,26 +844,23 @@
 
     <section id="music" class="content-section">
       <h2>Music</h2>
-      <p>Dive into the latest tracks and timeless classics from King Vibez. Available on all major streaming platforms.</p>
+      <p>Dive into the latest tracks and timeless classics from King Vibez. Listen directly here!</p>
       <div class="items-grid">
         <div class="item-card">
-          <img src="https://via.placeholder.com/300x200/ff6f61/ffffff?text=Album+Art+1" alt="Album Art for Track Title 1">
-          <h3>Track Title 1</h3>
-          <p>A high-energy banger that will get you moving!</p>
-          <a href="https://spotify.com/track/1" target="_blank" class="btn"><span>Listen</span></a>
-        </div>
+          <iframe class="spotify-embed" src="https://open.spotify.com/embed/track/6rqhFgbbKwnb9MLmUQkSyH?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+          <h3>Track Title 1 (Example)</h3>
+          <p>A high-energy banger that will get you moving! Listen now.</p>
+          </div>
         <div class="item-card">
-          <img src="https://via.placeholder.com/300x200/64b5f6/ffffff?text=Album+Art+2" alt="Album Art for Track Title 2">
-          <h3>Track Title 2</h3>
-          <p>Smooth melodies and deep lyrics, perfect for chill vibes.</p>
-          <a href="https://spotify.com/track/2" target="_blank" class="btn"><span>Listen</span></a>
-        </div>
+          <iframe class="spotify-embed" src="https://open.spotify.com/embed/track/2IfSjdF6V0T8I8Wj3lV7N5?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+          <h3>Track Title 2 (Example)</h3>
+          <p>Smooth melodies and deep lyrics, perfect for chill vibes. Enjoy!</p>
+          </div>
         <div class="item-card">
-          <img src="https://via.placeholder.com/300x200/f7b731/ffffff?text=Album+Art+3" alt="Album Art for Track Title 3">
-          <h3>Track Title 3</h3>
-          <p>Collaborative hit with a unique sound and powerful message.</p>
-          <a href="https://spotify.com/track/3" target="_blank" class="btn"><span>Listen</span></a>
-        </div>
+          <iframe class="spotify-embed" src="https://open.spotify.com/embed/album/5PFyvJj9c58rX30dE0sY4s?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+          <h3>Album Title (Example)</h3>
+          <p>Experience the full album. Immerse yourself in the journey.</p>
+          </div>
       </div>
     </section>
 
@@ -828,6 +956,21 @@
         <a href="https://spotify.com" target="_blank" aria-label="Spotify"><i class="fab fa-spotify"></i></a>
       </div>
     </section>
+
+    <section id="settings" class="content-section">
+      <h2>Settings</h2>
+      <p>Customize your experience.</p>
+
+      <div class="settings-group">
+        <label for="darkModeToggle">Dark Mode</label>
+        <label class="switch">
+          <input type="checkbox" id="darkModeToggle">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+    </section>
+
   </div> <footer class="footer">
     <span id="copyright-year"></span> King Vibez. All rights reserved.
   </footer>
@@ -839,10 +982,12 @@
     const sidebarLinks = document.querySelectorAll('.sidebar-link');
     const contentContainer = document.querySelector('.content-container');
     const scrollIndicator = document.getElementById('scroll-indicator');
+    const darkModeToggle = document.getElementById('darkModeToggle');
 
     function hideAllSections() {
       contentSections.forEach(section => {
         section.classList.remove('active');
+        section.scrollTop = 0; // Reset scroll position for hidden sections
       });
     }
 
@@ -853,18 +998,52 @@
         clickedLink.classList.add('active-link');
     }
 
+    // Theme Management Functions
+    function enableLightMode() {
+        body.classList.add('light-mode');
+        localStorage.setItem('theme', 'light');
+    }
+
+    function disableLightMode() {
+        body.classList.remove('light-mode');
+        localStorage.setItem('theme', 'dark');
+    }
+
+    function loadTheme() {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            enableLightMode();
+            darkModeToggle.checked = true; // Set toggle to checked if light mode
+        } else {
+            disableLightMode(); // Default to dark mode if no preference or 'dark'
+            darkModeToggle.checked = false; // Set toggle to unchecked if dark mode
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       // Set dynamic year in footer
       const yearSpan = document.getElementById('copyright-year');
       const currentYear = new Date().getFullYear();
       yearSpan.textContent = `© 2025 - ${currentYear}`;
 
+      // Load theme preference on page load
+      loadTheme();
+
       // Ensure hero section is active on initial load
       document.getElementById('hero-section').classList.add('active');
       document.querySelector('.sidebar-link[href="#hero-section"]').classList.add('active-link');
-      
+
       // Initially show scroll indicator for hero section
       scrollIndicator.style.display = 'flex';
+
+      // Event listener for Dark Mode toggle
+      darkModeToggle.addEventListener('change', () => {
+          if (darkModeToggle.checked) {
+              enableLightMode();
+          } else {
+              disableLightMode();
+          }
+      });
     });
 
     function toggleMenu() {
@@ -906,12 +1085,14 @@
 
                 setActiveLink(this);
 
+                // Smooth scroll to the top of the content container
                 window.scrollTo({
                     top: contentContainer.offsetTop,
                     behavior: 'smooth'
                 });
             }
 
+            // Close sidebar after clicking a link, if it's open
             if (sidebarMenu.classList.contains('open')) {
               toggleMenu();
             }
